@@ -11,8 +11,8 @@ from statistics import median
 #   VALEUR PAR DEFAUT
 ##########################
 
-path="/home/ubuntu/analyseurPBM/"
-csvName="tf5m-bullOnly-moyenne.csv"
+path="/home/moutonneux/bots/backtest/etudes-5m/"
+csvName="moyenne-etude-5m.csv"
 minFinalBalanceToBeSaved=0.0
 
 pathList = ('03-2022', '01-2022', '02-2022', '12-2021', '11-2021',  '10-2021',  '04-2022' , '09-2021' )
@@ -156,6 +156,7 @@ for index, row in df.iterrows() :
     pireFinalBalance=100000.0
     bestFinalBalance=0.0
     medianeList=[]
+    negativeMonths=[]
     for mois in pathList:
         df=pd.DataFrame([])
         del df
@@ -163,6 +164,8 @@ for index, row in df.iterrows() :
         if (exist(df,parametres)):
             nbOfMonth=nbOfMonth+1
             finalBalance=getFinalBalance(df,parametres)
+            if finalBalance < 1000 :
+                negativeMonths.append(mois)
             medianeList.append(finalBalance)
             finalBalanceSum=finalBalanceSum+finalBalance
             bestTradeSum=bestTradeSum+getBestTrade(df,parametres)
@@ -185,6 +188,7 @@ for index, row in df.iterrows() :
                     'pireFinalBalance' : [pireFinalBalance],
                     'bestFinalBalance' : [bestFinalBalance],
                     'finalBalanceList' : [sorted(medianeList)],
+                    'negativeMonths' : [negativeMonths],
                     'bestTradeMoyen': [bestTradeSum/nbOfMonth],
                     'worstTradeMoyen': [worstTradeSum/nbOfMonth],
                     'drawDownMoyen': [drawDownSum/nbOfMonth],
@@ -212,11 +216,16 @@ classement.to_csv(path+"pireFinalBalance-"+csvName, index=False)
 print("Trié par la pireFinalBalance:")
 print(classement)
 
-classement=classement.sort_values(by=['finalBalanceMoyenne'], ascending=False)
+classement=classement.sort_values(by=['nbOfMonth', 'finalBalanceMediane'], ascending=False)
+classement.to_csv(path+"finalBalanceMediane-"+csvName, index=False)
+print("Trié par la finalBalanceMediane:")
+print(classement)
+
+classement=classement.sort_values(by=['nbOfMonth', 'finalBalanceMoyenne'], ascending=False)
 if (float(classement['finalBalanceMoyenne'].iloc[0]) > bestValue ) :
     print(f"Nouvelle meilleure performance trouvée : {float(classement['finalBalanceMoyenne'].iloc[0])}")
     #On envoit une notification telegram si une meilleure performance est trouvée
-    telegram_send.send(messages=[f"Etude sur timeframe 5 minutes en bull uniquement :\n\nNouvelle meilleure performance trouvée sur {float(classement['nbOfMonth'].iloc[0])} mois : {float(classement['finalBalanceMoyenne'].iloc[0])}, avec une valeure médiane de {float(classement['finalBalanceMediane'].iloc[0])}, un pire résultat de {float(classement['pireFinalBalance'].iloc[0])} et un meilleur de {float(classement['bestFinalBalance'].iloc[0])}\nParamètres à utiliser : {float(classement['parametres'].iloc[0])}"])
+    telegram_send.send(messages=[f"Etude sur timeframe 5 minutes en bull uniquement :\n\nNouvelle meilleure performance trouvée sur {float(classement['nbOfMonth'].iloc[0])} mois : {float(classement['finalBalanceMoyenne'].iloc[0])}, avec une valeure médiane de {float(classement['finalBalanceMediane'].iloc[0])}, un pire résultat de {float(classement['pireFinalBalance'].iloc[0])} et un meilleur de {float(classement['bestFinalBalance'].iloc[0])}\nParamètres à utiliser : {str(classement['parametres'].iloc[0])}"])
 classement.to_csv(path+"balance-"+csvName, index=False)
 print("Trié par finalBalanceMoyenne :")
 print(classement)
