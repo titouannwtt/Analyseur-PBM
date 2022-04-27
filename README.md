@@ -31,4 +31,14 @@ dates, finalBalance, perfVSUSD, holdPercentage, vsHoldPercentage, bestTrade, wor
 
 ## A quoi sert quel fichier/dossier ?
 
-blabla
+- analyseurPBM.py est le code principal qui va récupérer les csv présents dans les dossiers de 01-2022 à 12-2021, il va ensuite dans un premier temps, les trier et les mettres à sa racine (les fichiers de 01-2022.csv à 12-2021.csv) puis croiser les paramètres communs pour établir des moyennes de performances qu'il enregistrera dans "balance-tf5m-bullOnly-moyenne.csv", "nbOfMonth-tf5m-bullOnly-moyenne...csv", "pireFinalBalance-tf5m-bullOnly-moy...csv" 
+
+- Les dossiers de 01-2022 à 12-2021 contiennent un code python nommé "algo" qui permet de lancer à répétition backtest.py sur une période de 1 mois avec des paramètres qui s'incrémentent. A chaque lancement de backtest.py, les performances réalisés par le backtest avec les paramètres données sont enregistrés dans un fichier csv créé dans ce même dossier.
+
+- Le dossier "database" contient toutes les données historiques permettant aux backtests de faire leur simulation
+
+- Le dossier "utilities" contient tous les fichiers python nécessaires à l'execution du backtest, [source](https://github.com/CryptoRobotFr/cBot-Project/tree/main/utilities)
+
+- les fichiers de 01-2022.csv à 12-2021.csv contiennent les résultats de chaque combinaison de paramètres avec les résultats triés selon la meilleure performance. Ces fichiers sont générés par le code analyseurPBM.py
+
+- "balance-tf5m-bullOnly-moyenne.csv", "nbOfMonth-tf5m-bullOnly-moyenne...", "pireFinalBalance-tf5m-bullOnly-moy..." sont 3 fichiers csv qui regroupent l'ensemble des paramètres avec leurs performances par mois. Triés respectivement selon la finalBalance, le nombre de mois et la pire perf. Ces fichiers sont générés par "analyseurPBM.py" à la fin de son execution.
