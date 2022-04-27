@@ -1,0 +1,2 @@
+# Analyseur-PBM
+Analyseur-PBM, pour "Analyse de Paramètres de Backtests par Mois". Des backtests sont réalisés sur une période de 1 mois avec des paramètres d'entrées différents, ainsi pour chaque mois nous connaissons les résultats de paramètres donnés. Analyseur-PBM centralise l'ensemble des résultats de ces backtests sur des périodes différentes, selon les paramètres. Ainsi pour chaque paramètres nous pouvons déterminer des informations telles que les performances moyennes sur tous les mois, les pires et meilleures performances, savoir quand elles ont eu lieu, etc.
