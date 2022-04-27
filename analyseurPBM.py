@@ -11,7 +11,7 @@ from statistics import median
 #   VALEUR PAR DEFAUT
 ##########################
 
-path="/home/moutonneux/bots/backtest/etudes-5m/"
+path="/home/ubuntu/analyseurPBM/"
 csvName="tf5m-bullOnly-moyenne.csv"
 minFinalBalanceToBeSaved=0.0
 
