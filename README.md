@@ -42,3 +42,23 @@ dates, finalBalance, perfVSUSD, holdPercentage, vsHoldPercentage, bestTrade, wor
 - les fichiers de 01-2022.csv à 12-2021.csv contiennent les résultats de chaque combinaison de paramètres avec les résultats triés selon la meilleure performance. Ces fichiers sont générés par le code analyseurPBM.py
 
 - "balance-tf5m-bullOnly-moyenne.csv", "nbOfMonth-tf5m-bullOnly-moyenne...", "pireFinalBalance-tf5m-bullOnly-moy..." sont 3 fichiers csv qui regroupent l'ensemble des paramètres avec leurs performances par mois. Triés respectivement selon la finalBalance, le nombre de mois et la pire perf. Ces fichiers sont générés par "analyseurPBM.py" à la fin de son execution.
+
+# Remerciement :
+Ce code vous est partagé gratuitement, vous pouvez me remercier en utilisant un de mes liens d'affiliations :
+
+- FTX : https://ftx.com/eu/profile#a=titouannwtt
+
+- Binance : https://www.binance.me/fr/activity/referral/offers/claim?ref=CPA_00C08H2X8E
+
+Ou en me faisant des dons cryptos :
+
+- Adresse BTC : 3GYhBgZMfgzqjYhVhc2w53oMcvZb4jfGfL
+
+- Adresse ETH : 0x43fC6F9B8b1CfBd83b52a1FD1de510effe0A49a7
+
+- Adresse SOL : 5QKaHfJWxAZ6sbU5QMb2e14yAAZ45iBH91SBgnheK26v
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://www.linkedin.com/in/titouan-wattelet-78a941162/
