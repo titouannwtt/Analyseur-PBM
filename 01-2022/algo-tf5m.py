@@ -11,10 +11,6 @@ import configparser
 #   VALEUR PAR DEFAUT
 ##########################
 
-cfg = configparser.ConfigParser()
-cfg.read('mois.cfg')
-fichierEnregistrement="backtest.csv"
-
 argumentList = sys.argv[1:]
 try:
     substring = ".csv"
@@ -28,6 +24,38 @@ try:
             classement = pd.read_csv(fichierEnregistrement)
         except :
             print(f"Le fichier {fichierEnregistrement} n'existe pas, nous allons le créer.")
+            classement = classement.append(pd.DataFrame({
+                    'dates' : [0],
+                    'finalBalance' : [0],
+                    'perfVSUSD' : [0],
+                    'holdPercentage' : [0],
+                    'vsHoldPercentage' : [0],
+                    'bestTrade' : [0],
+                    'worstTrade' : [0],
+                    'drawDown' : [0],
+                    'taxes' : [0],
+                    'totalTrades' : [0],
+                    'totalGoodTrades' : [0],
+                    'totalBadTrades' : [0],
+                    'winRateRatio' : [0],
+                    'tradesPerformance' : [0],
+                    'averagePercentagePositivTrades' : [0],
+                    'averagePercentageNegativTrades' : [0],
+                    'startingBalance': [0],
+                    'maxPositions': [0],
+                    'parametrePVO2': [0],
+                    'parametrePERF': [0],
+                    'parametreTRIX_HISTO': [0],
+                    'parametrePVO': [0],
+                    'parametreBOL_BANDwindowdev': [0],
+                    'parametreBOL_BANDwindow': [0],
+                    'parametreMACD': [0],
+                    'parametreEMA13D': [0],
+                    'parametreEMA9D': [0],
+                    'parametreEMA10': [0],
+                    'parametreEMA50': [0],
+                    'parametreEMA9D': [0],
+                    'parametreEMA45': [0]}), ignore_index=True)
     else:
         print("Vous devez spécifier un fichier .csv\npython3 algorithme.py <nom-du-fichier.csv>")
         exit()
@@ -162,6 +190,9 @@ parametreEMA45use = 'false'
 parametreEMA45 = parametreEMA45default
 
 bestFinalBalance = 0
+elapsed = 0
+measures = []
+measures.append(40)
 
 i=0
 
@@ -173,15 +204,23 @@ def launch_backtest():
     print(f"Lancement du backtest avec les paramètres : {dateAnnee} {dateMois} {dateJour} {startingBalance} {maxPositions} {parametrePVO2} {parametrePERF} {parametreTRIX_HISTO} {parametrePVO} {parametreBOL_BANDwindowdev} {parametreBOL_BANDwindow} {parametreMACD} {parametreEMA13D} {parametreEMA9D} {parametreEMA10} {parametreEMA50} {parametreEMA45}")
     global i
     global classement
+    global elapsed
+    global measures
     i=i+1
     pourcent=round(100*i/count,4)
-    print(f"Avancement total d'execution : {i}/{count} ({pourcent}%)")
+    moyenne=round(statistics.mean(measures),3)
+    start = time.time()
+    print(f"La dernière execution a durée : {elapsed} secondes")
+    print(f"Avancement total d'execution : {i}/{count} ({pourcent}%) (Temps restant estimé par rapport aux dernières executions : {((count-i)*moyenne)} secondes soit {(((count-i)*moyenne)/60)} minutes ou {round((count-i)*moyenne/60/60, 1)} heures ou {round((count-i)*elapsed/60/60/24, 1)} jours)")
     if ((classement['maxPositions'] == maxPositions) & (classement['parametrePVO2'] == parametrePVO2) & (classement['parametrePERF'] == parametrePERF) & (classement['parametreTRIX_HISTO'] == parametreTRIX_HISTO) & (classement['parametrePVO'] == parametrePVO) & (classement['parametreBOL_BANDwindowdev'] == parametreBOL_BANDwindowdev) & (classement['parametreBOL_BANDwindow'] == parametreBOL_BANDwindow) & (classement['parametreMACD'] == parametreMACD) & (classement['parametreEMA13D'] == parametreEMA13D) & (classement['parametreEMA9D'] == parametreEMA9D) & (classement['parametreEMA10'] == parametreEMA10) & (classement['parametreEMA50'] == parametreEMA50) & (classement['parametreEMA45'] == parametreEMA45)).any() :
         print(f"Données {dateAnnee} {dateMois} {dateJour} {startingBalance} {maxPositions} {parametrePVO2} {parametrePERF} {parametreTRIX_HISTO} {parametrePVO} {parametreBOL_BANDwindowdev} {parametreBOL_BANDwindow} {parametreMACD} {parametreEMA13D} {parametreEMA9D} {parametreEMA10} {parametreEMA50} {parametreEMA45} déjà présentes dans le classement")
     else :
         cmd = (f"python3 -W ignore _backtest-for-bear-only.py {dateAnnee} {dateMois} {dateJour} {startingBalance} {maxPositions} {parametrePVO2} {parametrePERF} {parametreTRIX_HISTO} {parametrePVO} {parametreBOL_BANDwindowdev} {parametreBOL_BANDwindow} {parametreMACD} {parametreEMA13D} {parametreEMA9D} {parametreEMA10} {parametreEMA50} {parametreEMA45}")
         p = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
         out, err = p.communicate() 
+        end = time.time()
+        elapsed = end - start
+        measures.append(elapsed)
         result=out.decode('utf-8')
         if result=='':
             result=1000
@@ -438,4 +477,4 @@ for j in range(2):
 
 print(classement.head())
 classement.to_csv(fichierEnregistrement)
-telegram_send.send(messages=[f"Votre algorithme d'études en timeframe 5 minutes a enregistré toutes les données dans {fichierEnregistrement} pour le mois de {str(cfg['DATE']['mois'])} {str(cfg['DATE']['date'])}"])
+telegram_send.send(messages=[f"Votre algorithme d'études en timeframe 5 minutes a enregistré toutes les données dans {fichierEnregistrement} "])
