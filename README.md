@@ -1,3 +1,7 @@
+<div id="top"></div>
+
+[![LinkedIn][linkedin-shield]][linkedin-url]
+
 # Analyseur-PBM
 Analyseur-PBM, pour "Analyse des Paramètres de Backtests par Mois".
 
